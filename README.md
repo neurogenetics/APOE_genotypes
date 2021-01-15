@@ -2,7 +2,7 @@
 `LNG ❤️ Open Science 😍`
 
 Determine APOE genotypes per sample using PLINK and Python
-- **Authors:** Mary B. Makarious and Makayla Portley (LNG/NIA/NINDS/NIH)
+- **Authors:** Mary B. Makarious, Makayla Portley, and Cornelis Blauwendraat (LNG/NIA/NINDS/NIH)
 - **Last Updated:** January 2021
 
 
@@ -10,9 +10,6 @@ Determine APOE genotypes per sample using PLINK and Python
 ### [1. Background Information](#1)
 ### [2. Generating PLINK Output](#2)
 ### [3. Generating APOE Genotypes per Sample using Python](#3)
-
-Planned additions
-- Separate by case-control and report percentages of both
 
 <a id="1"></a>
 ## 1. Background Information
@@ -60,7 +57,7 @@ Example `python APOE_genotypes_PLINK_ped.py -i apoe_snps.ped -o apoe_snps_test`
 
 # Determine APOE genotypes from PLINK output
     # January 2021
-    # Mary B. Makarious and Makayla Portley (LNG/NIA/NINDS/NIH)
+    # Mary B. Makarious, Makayla Portley, and Cornelis Blauwendraat (LNG/NIA/NINDS/NIH)
     # Script usage:
         # python APOE_genotypes_PLINK_ped.py -i INPUT.ped -o OUTPUT_NAME
 
@@ -80,6 +77,7 @@ Example `python APOE_genotypes_PLINK_ped.py -i apoe_snps.ped -o apoe_snps_test`
 import numpy as np
 import pandas as pd
 import sys
+from functools import reduce
 import argparse
 
 # Initialize parser and add arguments
@@ -121,9 +119,38 @@ input_ped_df.replace(np.nan, 'unknown', regex=True, inplace=True)
 # Make a file of just the FID, IID, SEX, PHENO, and APOE genotype
 subset_geno_df = input_ped_df.drop(columns=['PAT', 'MAT', 'rs429358', 'rs7412'])
 
-# Print the genotype counts to the user if being used interactively
-print("These are the final counts of the number of genotypes")
-print(subset_geno_df['APOE_GENOTYPE'].value_counts())
+## Generate counts
+# Generate APOE genotype counts and percentages for entire dataset
+counts_df = pd.DataFrame(subset_geno_df['APOE_GENOTYPE'].value_counts().reset_index())
+counts_df.columns = ['APOE_GENOTYPE', 'TOTAL_COUNT']
+counts_df['TOTAL_PERCENT'] = counts_df['TOTAL_COUNT'] / subset_geno_df.shape[0] * 100
+
+# Separate out into cases, controls, and missing phenotypes
+    # This assumes controls=1 and cases=2 (missing is -9)
+
+# Subset by phenotype
+missing_pheno_df = subset_geno_df[subset_geno_df['PHENO'] == -9]
+controls_df = subset_geno_df[subset_geno_df['PHENO'] == 1]
+cases_df = subset_geno_df[subset_geno_df['PHENO'] == 2]
+
+# Generate APOE genotype counts and percentages for missing phenotypes
+missing_pheno_counts_df = pd.DataFrame(missing_pheno_df['APOE_GENOTYPE'].value_counts().reset_index())
+missing_pheno_counts_df.columns = ['APOE_GENOTYPE', 'MISSING_PHENO_COUNT']
+missing_pheno_counts_df['MISSING_PHENO_PERCENT'] = missing_pheno_counts_df['MISSING_PHENO_COUNT'] / missing_pheno_df.shape[0] * 100
+
+# Generate APOE genotype counts and percentages for controls
+controls_counts_df = pd.DataFrame(controls_df['APOE_GENOTYPE'].value_counts().reset_index())
+controls_counts_df.columns = ['APOE_GENOTYPE', 'CONTROLS_COUNT']
+controls_counts_df['CONTROLS_PERCENT'] = controls_counts_df['CONTROLS_COUNT'] / controls_df.shape[0] * 100
+
+# Generate APOE genotype counts and percentages for cases
+cases_counts_df = pd.DataFrame(cases_df['APOE_GENOTYPE'].value_counts().reset_index())
+cases_counts_df.columns = ['APOE_GENOTYPE', 'CASES_COUNT']
+cases_counts_df['CASES_PERCENT'] = cases_counts_df['CASES_COUNT'] / cases_df.shape[0] * 100
+
+# Merge the dataframes together for final summary counts file
+dataframes_tomerge = [counts_df, missing_pheno_counts_df, controls_counts_df, cases_counts_df]
+merged_summary_df = reduce(lambda left,right: pd.merge(left,right,on='APOE_GENOTYPE'), dataframes_tomerge)
 
 ## Export
 complete_df_output = args.output + ".APOE_GENOTYPES.csv"
@@ -135,7 +162,7 @@ subset_geno_df.to_csv(complete_df_output, index=False)
 
 # Save out the counts as a .csv
 print(f"The summary counts have been saved here: {counts_df_output}")
-subset_geno_df['APOE_GENOTYPE'].value_counts().reset_index().to_csv(counts_df_output, index=False, header=['APOE_GENOTYPE', 'COUNT'])
+merged_summary_df.to_csv(counts_df_output, index=False)
 
 # Done!
 print("Thanks!")
@@ -144,24 +171,23 @@ print("Thanks!")
 Files Generated (Examples)
 - `*.APOE_GENOTYPES.csv` : Full .csv file with genotypes per sample
 
-
 |   FID   	|   IID   	| SEX 	| PHENO 	| rs429358_rs7412 	|  APOE_GENOTYPE 	|
 |:-------:	|:-------:	|:---:	|:-----:	|:---------------:	|:--------------:	|
 | sample1 	| sample1 	|  2  	|   2   	|      TT_CC      	|      e3/e3     	|
 | sample2 	| sample2 	|  1  	|   1   	|      CT_CC      	|      e3/e4     	|
 | sample3 	| sample3 	|  1  	|   2   	|      TT_CC      	|      e3/e3     	|
-| sample4 	| sample4 	|  1  	|   2   	|      CT_TC      	| e2/e4 or e1/e3 	|
+| sample4 	| sample4 	|  1  	|   2   	|      CT_TC      	|   e2/e4 or e1/e3 	|
 | sample5 	| sample5 	|  2  	|   1   	|      TT_TC      	|      e2/e3     	|
 | sample6 	| sample6 	|  1  	|   1   	|      TT_CC      	|      e3/e3     	|
 | sample7 	| sample7 	|  1  	|   2   	|      CC_CC      	|      e4/e4     	|
+... etc
 
 - `*.APOE_SUMMARY.csv` : Summary counts of the entire input .ped file
 
-| APOE_GENOTYPE  	| COUNT 	|
-|----------------	|-------	|
-| e3/e3          	| 1761  	|
-| e3/e4          	| 564   	|
-| e2/e3          	| 361   	|
-| e2/e4 or e1/e3 	| 58    	|
-| e4/e4          	| 42    	|
-| e2/e2          	| 19    	|
+|  APOE_GENOTYPE 	| TOTAL_COUNT 	| TOTAL_PERCENT 	| MISSING_PHENO_COUNT 	| MISSING_PHENO_PERCENT 	| CONTROLS_COUNT 	| CONTROLS_PERCENT 	| CASES_COUNT 	| CASES_PERCENT 	|
+|:--------------:	|:-----------:	|:-------------:	|:-------------------:	|:---------------------:	|:--------------:	|:----------------:	|:-----------:	|:-------------:	|
+|      e3/e3     	|     1761    	|   62.780749   	|         135         	|       60.267857       	|       595      	|     61.979167    	|     1031    	|   63.602714   	|
+|      e3/e4     	|     564     	|   20.106952   	|          44         	|       19.642857       	|       190      	|     19.791667    	|     330     	|   20.357804   	|
+|      e2/e3     	|     361     	|   12.869875   	|          36         	|       16.071429       	|       132      	|     13.750000    	|     193     	|   11.906231   	|
+| e2/e4 or e1/e3 	|      58     	|    2.067736   	|          6          	|        2.678571       	|       24       	|     2.500000     	|      28     	|    1.727329   	|
+|      e4/e4     	|      42     	|    1.497326   	|          3          	|        1.339286       	|       12       	|     1.250000     	|      27     	|    1.665638   	|

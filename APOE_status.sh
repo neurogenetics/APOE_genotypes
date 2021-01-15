@@ -2,15 +2,14 @@
 
 # Determine APOE genotypes from PLINK output
     # January 2021
-    # Mary B. Makarious and Makayla Portley (LNG/NIA/NINDS/NIH)
+    # Mary B. Makarious, Makayla Portley, and Cornelis Blauwendraat (LNG/NIA/NINDS/NIH)
 
 ## On Biowulf
 # Load an interactive node
-sinteractive --cpus-per-task=2 --mem=200g --constraint=ibfdr --gres=lscratch:200 --time=24:00:00
 
 # Load the necessary modules
 module load plink #v1.9.0
-module load python
+module load python #3.7
 
 # Initialize workspace variables
 WORK_DIR="/path/to/data"
