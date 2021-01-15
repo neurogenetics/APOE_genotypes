@@ -153,7 +153,7 @@ Files Generated (Examples)
 | sample6 	| sample6 	|  1  	|   1   	|      TT_CC      	|      e3/e3     	|
 | sample7 	| sample7 	|  1  	|   2   	|      CC_CC      	|      e4/e4     	|
 
-- `.APOE_SUMMARY.csv` : Summary counts of the entire input .ped file
+- `*.APOE_SUMMARY.csv` : Summary counts of the entire input .ped file
 
 | APOE_GENOTYPE  	| COUNT 	|
 |----------------	|-------	|
