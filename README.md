@@ -64,14 +64,17 @@ Example `python APOE_genotypes_PLINK_ped.py -i apoe_snps.ped -o apoe_snps_test`
 ## APOE Information
 # https://www.snpedia.com/index.php/APOE
 
-    # |          APOE GENO         | rs429358 | rs7412 |             COMBINED             |
-    # |:--------------------------:|:--------:|:------:|:--------------------------------:|
-    # |            e2/e2           |    TT    |   TT   |               TT_TT              |
-    # |            e2/e3           |    TT    |   TC   |          TT_TC or TT_CT          |
-    # | e2/e4 or e1/e3 (Ambiguous) |    TC    |   TC   | TC_TC or CT_CT or TC_CT or CT_TC |
-    # |            e3/e3           |    TT    |   CC   |               TT_CC              |
-    # |            e3/e4           |    TC    |   CC   |          TC_CC or CT_CC          |
-    # |            e4/e4           |    CC    |   CC   |               CC_CC              |
+    # |          APOE GENO         	| rs429358 	| rs7412 	|             COMBINED             	|
+    # |:--------------------------:	|:--------:	|:------:	|:--------------------------------:	|
+    # |            e1/e1           	|    CC    	|   TT   	|               CC_TT              	|
+    # |            e1/e2           	|    CT    	|   TT   	|          CT_TT or TC_TT          	|
+    # |            e1/e4           	|    CC    	|   CT   	|          CC_CT or CC_TC          	|
+    # |            e2/e2           	|    TT    	|   TT   	|               TT_TT              	|
+    # |            e2/e3           	|    TT    	|   TC   	|          TT_TC or TT_CT          	|
+    # | e2/e4 or e1/e3 (Ambiguous) 	|    TC    	|   TC   	| TC_TC or CT_CT or TC_CT or CT_TC 	|
+    # |            e3/e3           	|    TT    	|   CC   	|               TT_CC              	|
+    # |            e3/e4           	|    TC    	|   CC   	|          TC_CC or CT_CC          	|
+    # |            e4/e4           	|    CC    	|   CC   	|               CC_CC              	|
 
 # Import the necessary packages
 import numpy as np
