@@ -51,6 +51,7 @@ plink --bfile apoe_snps --recode compound-genotypes --out apoe_snps
 Script Usage
 `python APOE_genotypes_PLINK_ped.py -i INPUT.ped -o OUTPUT_NAME`
 
+Example `python APOE_genotypes_PLINK_ped.py -i apoe_snps.ped -o apoe_snps_test`
 
 ```python
 #!/bin/env python

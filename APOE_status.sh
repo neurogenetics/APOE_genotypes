@@ -13,7 +13,7 @@ module load plink #v1.9.0
 module load python
 
 # Initialize workspace variables
-WORK_DIR="/data/LNG/makariousmb/Projects/GenoMLxAMP/clean_wgs/exp_apoe"
+WORK_DIR="/path/to/data"
 
 ## APOE Information
     # |  APOE GENO  | rs429358 | rs7412 |             Combined             |
@@ -28,7 +28,7 @@ WORK_DIR="/data/LNG/makariousmb/Projects/GenoMLxAMP/clean_wgs/exp_apoe"
 cd $WORK_DIR
 
 ## Pull out the 2 variants of interest
-plink --bfile ./../AMP_Euro_sampleQC_variantQC_FINAL --snps rs429358,rs7412 --make-bed --out apoe_snps
+plink --bfile ./../YOUR_PLINK_FILE --snps rs429358,rs7412 --make-bed --out apoe_snps
 
 ## Recode into compound genotypes (these will be in the order of how you extracted the SNPs)
 plink --bfile apoe_snps --recode compound-genotypes --out apoe_snps
