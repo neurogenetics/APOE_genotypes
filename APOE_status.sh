@@ -35,13 +35,8 @@ plink --bfile apoe_snps --recode compound-genotypes --out apoe_snps
     # This makes a .ped and .map file (with no headers!)
     # Format example
     # FID IID PAT MAT SEX PHENO rs429358 rs7412
-    # BF-1009 BF-1009 0 0 1 1 CT CC
-    # BF-1010 BF-1010 0 0 1 2 TT CC
-    # BF-1011 BF-1011 0 0 1 2 CT TC
-    # BF-1012 BF-1012 0 0 2 1 TT TC
-    # BF-1013 BF-1013 0 0 1 1 TT CC
-    # BF-1014 BF-1014 0 0 2 1 CT CC
-    # BF-1015 BF-1015 0 0 1 2 TT TC
+    # sample1 sample1 0 0 1 1 CT CC
+    # sample2 sample2 0 0 1 2 TT CC
 
 ## Run the following Python script
 python APOE_genotypes_PLINK_ped.py -i apoe_snps.ped -o apoe_snps_test

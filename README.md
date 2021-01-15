@@ -11,6 +11,8 @@ Determine APOE genotypes per sample using PLINK and Python
 ### [2. Generating PLINK Output](#2)
 ### [3. Generating APOE Genotypes per Sample using Python](#3)
 
+Planned additions
+- Separate by case-control and report percentages of both
 
 <a id="1"></a>
 ## 1. Background Information
@@ -42,8 +44,8 @@ plink --bfile apoe_snps --recode compound-genotypes --out apoe_snps
 
     # Format example
     # FID IID PAT MAT SEX PHENO rs429358 rs7412
-    # BF-1009 BF-1009 0 0 1 1 CT CC
-    # BF-1010 BF-1010 0 0 1 2 TT CC
+    # sample1 sample1 0 0 1 1 CT CC
+    # sample2 sample2 0 0 1 2 TT CC
 ```
 
 <a id="3"></a>
@@ -153,7 +155,7 @@ Files Generated (Examples)
 | sample6 	| sample6 	|  1  	|   1   	|      TT_CC      	|      e3/e3     	|
 | sample7 	| sample7 	|  1  	|   2   	|      CC_CC      	|      e4/e4     	|
 
-- `.APOE_SUMMARY.csv` : Summary counts of the entire input .ped file
+- `*.APOE_SUMMARY.csv` : Summary counts of the entire input .ped file
 
 | APOE_GENOTYPE  	| COUNT 	|
 |----------------	|-------	|
