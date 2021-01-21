@@ -14,14 +14,17 @@ Determine APOE genotypes per sample using PLINK and Python
 <a id="1"></a>
 ## 1. Background Information
 
-|          APOE GENO         | rs429358 | rs7412 |             COMBINED             |
-|:--------------------------:|:--------:|:------:|:--------------------------------:|
-|            e2/e2           |    TT    |   TT   |               TT_TT              |
-|            e2/e3           |    TT    |   TC   |          TT_TC or TT_CT          |
-| e2/e4 or e1/e3 (Ambiguous) |    TC    |   TC   | TC_TC or CT_CT or TC_CT or CT_TC |
-|            e3/e3           |    TT    |   CC   |               TT_CC              |
-|            e3/e4           |    TC    |   CC   |          TC_CC or CT_CC          |
-|            e4/e4           |    CC    |   CC   |               CC_CC              |
+|          APOE GENO         	| rs429358 	| rs7412 	|             COMBINED             	|
+|:--------------------------:	|:--------:	|:------:	|:--------------------------------:	|
+|            e1/e1           	|    CC    	|   TT   	|               CC_TT              	|
+|            e1/e2           	|    CT    	|   TT   	|          CT_TT or TC_TT          	|
+|            e1/e4           	|    CC    	|   CT   	|          CC_CT or CC_TC          	|
+|            e2/e2           	|    TT    	|   TT   	|               TT_TT              	|
+|            e2/e3           	|    TT    	|   TC   	|          TT_TC or TT_CT          	|
+| e2/e4 or e1/e3 (Ambiguous) 	|    TC    	|   TC   	| TC_TC or CT_CT or TC_CT or CT_TC 	|
+|            e3/e3           	|    TT    	|   CC   	|               TT_CC              	|
+|            e3/e4           	|    TC    	|   CC   	|          TC_CC or CT_CC          	|
+|            e4/e4           	|    CC    	|   CC   	|               CC_CC              	|
 
 Derived from https://www.snpedia.com/index.php/APOE
 
@@ -98,6 +101,11 @@ input_ped_df['rs429358_rs7412'] = input_ped_df['rs429358'].astype(str)+'_'+input
 
 # Initialize a dictionary with the genotypes to search what genotype the alleles generate
 apoe_genotypes_dict = {
+    'CC_TT' : 'e1/e1',
+    'CT_TT' : 'e1/e2',
+    'TC_TT' : 'e1/e2',
+    'CC_CT' : 'e1/e4',
+    'CC_TC' : 'e1/e4',
     'TT_TT' : 'e2/e2',
     'TT_TC' : 'e2/e3',
     'TT_CT' : 'e2/e3',
