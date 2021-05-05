@@ -28,6 +28,12 @@ Determine APOE genotypes per sample using PLINK and Python
 
 Derived from https://www.snpedia.com/index.php/APOE
 
+In hg38, 
+- [rs7412](https://www.ncbi.nlm.nih.gov/snp/rs7412) is chr19:44908822:C:T 
+- [rs429358](https://www.ncbi.nlm.nih.gov/snp/rs429358) is chr19:44908684:T:C
+
+from [NIA's Alzheimer's Fact Sheet](https://www.nia.nih.gov/health/alzheimers-disease-genetics-fact-sheet#:~:text=APOE%20%CE%B54%20increases%20risk%20for,3%20percent%20carry%20two%20copies.), 
+> APOE ε4 increases risk for Alzheimer's disease and is also associated with an earlier age of disease onset. Having one or two APOE ε4 alleles increases the risk of developing Alzheimer's
 
 <a id="2"></a>
 ## 2. Generating PLINK Output
